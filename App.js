@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { Dimensions, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 
 
@@ -16,6 +16,14 @@ const COLORS = {
   blue: "#80DEEA",
   pink: "#CF93D9",
   green: "#80CBC4"
+}
+
+function ActionBar() {
+  return (
+    <TouchableOpacity style={{ width: 60, backgroundColor: "black", height: 60, borderRadius: 20, justifyContent: 'center', position: 'absolute', bottom: 0, right: 0, margin: 20, shadowColor: 'black',shadowRadius: 10,shadowOpacity:0.5, shadowOffset: { width: 0, height: 5 } }}>
+      <Feather name="plus" color="white" size={30} style={{ alignSelf: 'center' }} />
+    </TouchableOpacity>
+  )
 }
 
 function RoundedButton({ children, onPress = () => { } }) {
@@ -80,6 +88,8 @@ export default function App() {
         </View>
 
       </View>
+
+      <ActionBar />
     </SafeAreaView>
   );
 }
