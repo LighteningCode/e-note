@@ -39,7 +39,7 @@ function NoteCardView({ title, date = "No date", backgroundColor = "#616161", ty
   let comp_height;
   let comp_width;
   const MAX_ALLOWED_WIDTH = device_width - (MAIN_PADDING * 2.5) - (CARD_MARGIN)
-
+  let datePosition = 'left'
 
   if (type === "square") {
     comp_width = MAX_ALLOWED_WIDTH / 2
@@ -47,6 +47,7 @@ function NoteCardView({ title, date = "No date", backgroundColor = "#616161", ty
   } else if (type === "wide") {
     comp_height = MAX_ALLOWED_WIDTH / 2
     comp_width = MAX_ALLOWED_WIDTH
+    datePosition = 'right'
   } else if (type = "long") {
 
   }
@@ -56,7 +57,7 @@ function NoteCardView({ title, date = "No date", backgroundColor = "#616161", ty
       <View style={{ flex: 10 }}>
         <Text style={{ fontSize: 24, fontWeight: '500' }}>{title}</Text>
       </View>
-      <Text style={{ fontSize: 16, fontWeight: '300', flex: 2 }}>{date}</Text>
+      <Text style={{ fontSize: 16, fontWeight: '300', flex: 2, textAlign:datePosition  }}>{date}</Text>
     </View>
   )
 
@@ -82,9 +83,9 @@ export default function App() {
         </View>
 
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
-          <NoteCardView backgroundColor={COLORS.red} title={"Hello from here awdgsdagdsgasg asdgsag awdgsadg dwagssgd sdag"} date={"May 21, 2020"} />
-          <NoteCardView backgroundColor={COLORS.pink} title={"Hello from here"} />
-          <NoteCardView backgroundColor={COLORS.orange} title={"Hello from here"} />
+          <NoteCardView backgroundColor={COLORS.red} title={"How to make your personal brand stand out"} date={"May 21, 2020"} />
+          <NoteCardView backgroundColor={COLORS.pink} title={"School rep and the story"} />
+          <NoteCardView backgroundColor={COLORS.orange} title={"Scenery and places to work in 2020"} type="wide" />
         </View>
 
       </View>
