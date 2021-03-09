@@ -46,7 +46,7 @@ function NoteCardView({ title, date = "No date", backgroundColor = "#616161", ty
     comp_height = comp_width;
   } else if (type === "wide") {
     comp_height = MAX_ALLOWED_WIDTH / 2
-    comp_width = MAX_ALLOWED_WIDTH
+    comp_width = MAX_ALLOWED_WIDTH + (CARD_MARGIN*2)
     datePosition = 'right'
   } else if (type = "long") {
 
