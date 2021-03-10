@@ -2,6 +2,9 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { Dimensions, FlatList, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
+import { createStackNavigator } from '@react-navigation/stack';
+
+const AppStack = createStackNavigator()
 
 
 let device_width = Dimensions.get("window").width;

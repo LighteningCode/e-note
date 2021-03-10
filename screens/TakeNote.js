@@ -5,6 +5,7 @@ import { Feather } from '@expo/vector-icons';
 
 
 
+
 function TakeNote(){
     return(
         <View>
