@@ -66,12 +66,12 @@ function NoteCardView({ title, date = "No date", backgroundColor = "#616161", ty
 
 }
 
-export default function App() {
+function NoteList() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#252525' }}>
       <View style={styles.container}>
 
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 20,position:'absolute',zIndex:500, width:device_width, paddingHorizontal: 40}}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 20, position: 'absolute', zIndex: 500, width: device_width, paddingHorizontal: 40 }}>
 
           <View style={{ alignSelf: 'center' }}>
             <Text style={{ fontSize: 30, fontWeight: '600', color: 'white' }}>Notes</Text>
@@ -85,8 +85,8 @@ export default function App() {
 
         </View>
 
-        <ScrollView style={{height:device_height, paddingTop: 70, flex: 1}}>
-          <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between',height: device_height,flex: 1 }}>
+        <ScrollView style={{ height: device_height, paddingTop: 70, flex: 1 }}>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', height: device_height, flex: 1 }}>
             <NoteCardView backgroundColor={COLORS.red} title={"How to make your personal brand stand out"} date={"May 21, 2020"} />
             <NoteCardView backgroundColor={COLORS.pink} title={"School rep and the story"} />
             <NoteCardView backgroundColor={COLORS.orange} title={"Scenery and places to work in 2020"} type="wide" />
@@ -101,6 +101,14 @@ export default function App() {
 
       <ActionBar />
     </SafeAreaView>
+  )
+}
+
+export default function App() {
+  return (
+    <AppStack.Navigator>
+      <AppStack.Screen name="Notes" component={NoteList}/>
+    </AppStack.Navigator>
   );
 }
 
