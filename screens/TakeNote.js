@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
 
 function TakeNote(props) {
 
-    const { navigation, } = props
+    const { navigation, route } = props
 
     const initalMount = useRef(true)
     const [date, setDate] = useState('')
@@ -67,6 +67,14 @@ function TakeNote(props) {
         }
     }, [title, date, noteText, initalMount])
 
+    useEffect(() => {
+        if (route.params) {
+            setTitle(route.params.title)
+            setNoteText(route.params.text)
+        }
+        return () => { }
+    }, [route])
+
     const getAllStoredNotes = async () => {
         try {
             const value = await AsyncStorage.getItem('@notes')
@@ -84,20 +92,43 @@ function TakeNote(props) {
     const handleBackbutton = () => {
 
         // before goint back save the data 
-        const data = {
-            title: title,
-            date: date,
-            text: noteText
-        }
-
         let _tempNotes = allNotes.data
-        _tempNotes[_tempNotes.length] = data
 
-        if (data.title !== '') {
-            storeData("@notes", _tempNotes)
+        if (typeof route.params === "object") {
+
+            const data = {
+                id: route.params.id,
+                title: title,
+                date: date,
+                text: noteText
+            }
+
+            _tempNotes[route.params.id] = data
+
+            if (data.title !== '') {
+                storeData("@notes", _tempNotes)
+            }
+
+            navigation.navigate("Notes", { allNotes: _tempNotes })
         }
-        
-        navigation.navigate("Notes", { allNotes: _tempNotes })
+
+        if (typeof route.params !== "object") {
+           
+            const data = {
+                id: _tempNotes.length,
+                title: title,
+                date: date,
+                text: noteText
+            }
+
+            _tempNotes[_tempNotes.length] = data
+
+            if (data.title !== '') {
+                storeData("@notes", _tempNotes)
+            }
+
+            navigation.navigate("Notes", { allNotes: _tempNotes })
+        }
     }
 
 
