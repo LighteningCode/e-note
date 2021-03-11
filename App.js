@@ -13,7 +13,7 @@ const AppStack = createStackNavigator()
 
 let device_width = Dimensions.get("window").width;
 let device_height = Dimensions.get("window").height;
-const MAIN_PADDING = 30;
+const MAIN_PADDING = 15;
 const CARD_MARGIN = 5
 
 const COLORS = {
@@ -23,9 +23,9 @@ const COLORS = {
   blue: "#80DEEA",
   pink: "#CF93D9",
   green: "#80CBC4"
-} 
+}
 
-function ActionButton({onPress}) {
+function ActionButton({ onPress }) {
   return (
     <TouchableOpacity onPress={onPress} style={{ width: 60, backgroundColor: "black", height: 60, borderRadius: 20, justifyContent: 'center', position: 'absolute', bottom: 0, right: 0, margin: 20, shadowColor: 'black', shadowRadius: 10, shadowOpacity: 0.5, shadowOffset: { width: 0, height: 5 } }}>
       <Feather name="plus" color="white" size={30} style={{ alignSelf: 'center' }} />
@@ -38,7 +38,7 @@ function NoteCardView({ title, date = "No date", backgroundColor = "#616161", ty
 
   let comp_height;
   let comp_width;
-  const MAX_ALLOWED_WIDTH = device_width - (MAIN_PADDING * 2.5) - (CARD_MARGIN)
+  const MAX_ALLOWED_WIDTH = device_width - (MAIN_PADDING * 3) - (CARD_MARGIN)
   let datePosition = 'left'
 
   if (type === "square") {
@@ -65,10 +65,10 @@ function NoteCardView({ title, date = "No date", backgroundColor = "#616161", ty
 
 function NoteList(props) {
 
-  const {navigation} = props
+  const { navigation } = props
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#252525' }}>
+    <SafeAreaView style={{ height: device_height, backgroundColor: '#252525' }}>
       <View style={styles.container}>
 
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 20, position: 'absolute', zIndex: 500, width: device_width, paddingHorizontal: MAIN_PADDING }}>
@@ -85,21 +85,24 @@ function NoteList(props) {
 
         </View>
 
-        <ScrollView style={{ height: device_height, paddingTop: 70, flex: 1 }}>
-          <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', height: device_height, flex: 1 }}>
-            <NoteCardView backgroundColor={COLORS.red} title={"How to make your personal brand stand out"} date={"May 21, 2020"} />
-            <NoteCardView backgroundColor={COLORS.pink} title={"School rep and the story"} />
-            <NoteCardView backgroundColor={COLORS.orange} title={"Scenery and places to work in 2020"} type="wide" />
-            <NoteCardView backgroundColor={COLORS.blue} title={"Being a Christian in 2020"} type="wide" />
-            <NoteCardView backgroundColor={COLORS.pink} title={"What independence means to mesfafsasfhashfshafhs sahshasfh"} />
-            <NoteCardView backgroundColor={COLORS.blue} title={"Being a Christian in 2020"} type="wide" />
-            <NoteCardView backgroundColor={COLORS.pink} title={"What independence means to mesfafsasfhashfshafhs sahshasfh"} />
-          </View>
-        </ScrollView>
+        <View style={{ flex: 1, marginVertical: 70 }}>
+          <ScrollView style={{ backgroundColor: 'red', height: device_height }}>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', flex: 1 }}>
+              <NoteCardView backgroundColor={COLORS.red} title={"How to make your personal brand stand out"} date={"May 21, 2020"} />
+              <NoteCardView backgroundColor={COLORS.pink} title={"School rep and the story"} />
+              <NoteCardView backgroundColor={COLORS.orange} title={"Scenery and places to work in 2020"} type="wide" />
+              <NoteCardView backgroundColor={COLORS.blue} title={"Being a Christian in 2020"} type="wide" />
+              <NoteCardView backgroundColor={COLORS.pink} title={"What independence means to mesfafsasfhashfshafhs sahshasfh"} />
+              <NoteCardView backgroundColor={COLORS.blue} title={"Being a Christian in 2020"} type="wide" />
+              <NoteCardView backgroundColor={COLORS.pink} title={"What independence means to mesfafsasfhashfshafhs sahshasfh"} />
+            </View>
+          </ScrollView>
+        </View>
+
 
       </View>
 
-      <ActionButton onPress={()=> navigation.navigate("Write")} />
+      <ActionButton onPress={() => navigation.navigate("Write")} />
     </SafeAreaView>
   )
 }
@@ -119,6 +122,6 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#252525',
     paddingHorizontal: MAIN_PADDING,
-    height: device_height
+    height: device_height,
   },
 });
