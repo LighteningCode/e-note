@@ -86,7 +86,7 @@ function NoteList(props) {
         </View>
 
         <View style={{ flex: 1, marginVertical: 70 }}>
-          <ScrollView style={{ backgroundColor: 'red', height: device_height }}>
+          <ScrollView style={{ backgroundColor: 'red' }}>
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', flex: 1 }}>
               <NoteCardView backgroundColor={COLORS.red} title={"How to make your personal brand stand out"} date={"May 21, 2020"} />
               <NoteCardView backgroundColor={COLORS.pink} title={"School rep and the story"} />
@@ -110,7 +110,7 @@ function NoteList(props) {
 export default function App() {
   return (
     <NavigationContainer>
-      <AppStack.Navigator initialRouteName="Notes">
+      <AppStack.Navigator initialRouteName="Write">
         <AppStack.Screen options={{ headerShown: false }} name="Notes" component={NoteList} />
         <AppStack.Screen options={{ headerShown: false }} name="Write" component={TakeNote} />
       </AppStack.Navigator>
