@@ -2,6 +2,9 @@ import React from 'react';
 import { Dimensions, FlatList, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import RoundedButton from '../components/RoundedButton';
+import { useRef } from 'react';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 
 let device_width = Dimensions.get("window").width;
@@ -42,7 +45,24 @@ const styles = StyleSheet.create({
 
 function TakeNote(props) {
 
-    const {navigation} = props
+    const { navigation } = props
+    const initalMount = useRef(true)
+    const [date, setDate] = useState('')
+    const [title, setTitle] = useState("")
+    const [noteText, setNoteText] = useState("")
+
+    useEffect(() => {
+        if (initalMount.current) {
+            const d = new Date();
+            const ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
+            const mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(d);
+            const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
+            setDate(`${da}-${mo}-${ye}`)
+            initalMount.current = false
+        } else {
+            // refresh
+        }
+    }, [title, date, noteText, initalMount])
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#252525' }}>
@@ -51,7 +71,7 @@ function TakeNote(props) {
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 20, position: 'absolute', zIndex: 500, width: device_width, paddingHorizontal: 30 }}>
 
                     <View style={{ alignSelf: 'center' }}>
-                        <RoundedButton onPress={()=>navigation.goBack()}>
+                        <RoundedButton onPress={() => navigation.goBack()}>
                             <Feather name="chevron-left" size={24} color="white" />
                         </RoundedButton>
                     </View>
@@ -65,22 +85,26 @@ function TakeNote(props) {
                 </View>
 
                 <ScrollView style={{ height: device_height, paddingTop: 70, flex: 1 }}>
-                    <TextInput 
-                    placeholder={"Type title here..."}
-                    placeholderTextColor="#999999"
-                    multiline={true} 
-                    style={styles.textbox_title}
-                    selectionColor="white"
+                    <TextInput
+                        placeholder={"Type title here..."}
+                        placeholderTextColor="#999999"
+                        value={title}
+                        onChangeText={(text) => setTitle(text)}
+                        multiline={true}
+                        style={styles.textbox_title}
+                        selectionColor="white"
                     />
 
-                    <Text style={{color:'#6E6E6E', fontSize: 20, fontWeight: "200", marginVertical: 15}}>Date</Text>
+                    <Text style={{ color: '#6E6E6E', fontSize: 20, fontWeight: "200", marginVertical: 15 }}>{date}</Text>
 
-                    <TextInput 
-                    placeholder={"Whats on your mind..."}
-                    placeholderTextColor="#999999"
-                    multiline={true} 
-                    style={styles.textbox}
-                    selectionColor="white"
+                    <TextInput
+                        placeholder={"Whats on your mind..."}
+                        placeholderTextColor="#999999"
+                        multiline={true}
+                        value={noteText}
+                        onChangeText={(text) => setNoteText(text)}
+                        style={styles.textbox}
+                        selectionColor="white"
                     />
                 </ScrollView>
 
