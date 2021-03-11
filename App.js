@@ -110,7 +110,7 @@ function NoteList(props) {
 export default function App() {
   return (
     <NavigationContainer>
-      <AppStack.Navigator initialRouteName="Write">
+      <AppStack.Navigator initialRouteName="Notes">
         <AppStack.Screen options={{ headerShown: false }} name="Notes" component={NoteList} />
         <AppStack.Screen options={{ headerShown: false }} name="Write" component={TakeNote} />
       </AppStack.Navigator>

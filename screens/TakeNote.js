@@ -1,10 +1,8 @@
-import React from 'react';
-import { Dimensions, FlatList, KeyboardAvoidingView, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import React, { useRef, useState, useEffect } from 'react';
+import { Dimensions, FlatList, KeyboardAvoidingView, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Keyboard, TouchableWithoutFeedback, _Text } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import RoundedButton from '../components/RoundedButton';
-import { useRef } from 'react';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 let device_width = Dimensions.get("window").width;
@@ -43,43 +41,15 @@ const styles = StyleSheet.create({
     }
 });
 
-const text = `
-sadga
-asdg
-g
-a
-g
-
-
-asd
-gdsagsg
-
-
-
-asdg
-d
-ag
-sgda
-sd
-g
-asgd
-s
-dag
-
-
-
-asgd
-asg
-
-`
-
 function TakeNote(props) {
 
     const { navigation } = props
     const initalMount = useRef(true)
     const [date, setDate] = useState('')
     const [title, setTitle] = useState("")
-    const [noteText, setNoteText] = useState(text)
+    const [noteText, setNoteText] = useState("")
+    const [allNotes, setAllNotes] = useState({ data: [] })
+
 
     useEffect(() => {
         if (initalMount.current) {
@@ -88,16 +58,64 @@ function TakeNote(props) {
             const mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(d);
             const da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
             setDate(`${da}-${mo}-${ye}`)
+            getAllStoredNotes()
+
             initalMount.current = false
         } else {
             // refresh
         }
     }, [title, date, noteText, initalMount])
 
+    const getAllStoredNotes = async () => {
+        try {
+            const value = await AsyncStorage.getItem('@notes')
+            if (value !== null) {
+                console.log(value)
+                setAllNotes(prevState => ({...prevState,data: JSON.parse(value)}))
+            }
+        } catch (e) {
+            // error reading value
+            console.log("An error occured retriving data")
+        }
+    }
+
+
+    const handleBackbutton = () => {
+
+        // before goint back save the data 
+        const data = {
+            title: title,
+            date: date,
+            text: noteText
+        }
+
+        let _tempNotes =  allNotes.data
+        _tempNotes[_tempNotes.length] = data
+
+        if (data.title !== '') {
+            storeData("@notes",_tempNotes)   
+        }
+        
+        navigation.goBack()
+    }
+
+
+    const storeData = async (key, value) => {
+
+        try {
+            const jsonValue = JSON.stringify(value)
+            await AsyncStorage.setItem('@notes', jsonValue)
+        } catch (e) {
+            // saving error
+            console.log("An error occured while saving the data")
+        }
+
+    }
+
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#252525' }}>
 
-            <TouchableWithoutFeedback onPress={Keyboard.dismiss} style={{flex:1}} >
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss} style={{ flex: 1 }} >
                 <View style={styles.container}>
 
 
@@ -105,7 +123,7 @@ function TakeNote(props) {
                     <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-between', marginVertical: 20, position: 'absolute', zIndex: 500, width: device_width, paddingHorizontal: 30 }}>
 
                         <View style={{ alignSelf: 'center' }}>
-                            <RoundedButton onPress={() => navigation.goBack()}>
+                            <RoundedButton onPress={() => handleBackbutton()}>
                                 <Feather name="chevron-left" size={24} color="white" />
                             </RoundedButton>
                         </View>
@@ -137,7 +155,7 @@ function TakeNote(props) {
                             behavior={Platform.OS === "ios" ? "padding" : "height"}
                             style={{ flex: 1 }}
                         >
-                            <View style={{paddingBottom: 50}}>
+                            <View style={{ paddingBottom: 50 }}>
                                 <TextInput
                                     placeholder={"Whats on your mind..."}
                                     placeholderTextColor="#999999"
