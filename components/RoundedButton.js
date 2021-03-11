@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
 
 function RoundedButton({ children, onPress = () => { } }) {
     return (
-        <TouchableOpacity onPress={onPress} style={styles.roundedButton}>
+        <TouchableOpacity onPress={onPress} activeOpacity={0.7} style={styles.roundedButton}>
             {children}
         </TouchableOpacity>
     )

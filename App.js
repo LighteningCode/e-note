@@ -3,6 +3,10 @@ import React from 'react';
 import { Dimensions, FlatList, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { createStackNavigator } from '@react-navigation/stack';
+import { NavigationContainer } from '@react-navigation/native';
+import TakeNote from './screens/TakeNote';
+import RoundedButton from './components/RoundedButton';
+
 
 const AppStack = createStackNavigator()
 
@@ -19,23 +23,16 @@ const COLORS = {
   blue: "#80DEEA",
   pink: "#CF93D9",
   green: "#80CBC4"
-}
+} 
 
-function ActionBar() {
+function ActionButton({onPress}) {
   return (
-    <TouchableOpacity style={{ width: 60, backgroundColor: "black", height: 60, borderRadius: 20, justifyContent: 'center', position: 'absolute', bottom: 0, right: 0, margin: 20, shadowColor: 'black', shadowRadius: 10, shadowOpacity: 0.5, shadowOffset: { width: 0, height: 5 } }}>
+    <TouchableOpacity onPress={onPress} style={{ width: 60, backgroundColor: "black", height: 60, borderRadius: 20, justifyContent: 'center', position: 'absolute', bottom: 0, right: 0, margin: 20, shadowColor: 'black', shadowRadius: 10, shadowOpacity: 0.5, shadowOffset: { width: 0, height: 5 } }}>
       <Feather name="plus" color="white" size={30} style={{ alignSelf: 'center' }} />
     </TouchableOpacity>
   )
 }
 
-function RoundedButton({ children, onPress = () => { } }) {
-  return (
-    <TouchableOpacity onPress={onPress} style={styles.roundedButton}>
-      {children}
-    </TouchableOpacity>
-  )
-}
 
 function NoteCardView({ title, date = "No date", backgroundColor = "#616161", type = "square" }) {
 
@@ -66,12 +63,15 @@ function NoteCardView({ title, date = "No date", backgroundColor = "#616161", ty
 
 }
 
-function NoteList() {
+function NoteList(props) {
+
+  const {navigation} = props
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#252525' }}>
       <View style={styles.container}>
 
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 20, position: 'absolute', zIndex: 500, width: device_width, paddingHorizontal: 40 }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 20, position: 'absolute', zIndex: 500, width: device_width, paddingHorizontal: MAIN_PADDING }}>
 
           <View style={{ alignSelf: 'center' }}>
             <Text style={{ fontSize: 30, fontWeight: '600', color: 'white' }}>Notes</Text>
@@ -99,16 +99,19 @@ function NoteList() {
 
       </View>
 
-      <ActionBar />
+      <ActionButton onPress={()=> navigation.navigate("Write")} />
     </SafeAreaView>
   )
 }
 
 export default function App() {
   return (
-    <AppStack.Navigator>
-      <AppStack.Screen name="Notes" component={NoteList}/>
-    </AppStack.Navigator>
+    <NavigationContainer>
+      <AppStack.Navigator initialRouteName="Notes">
+        <AppStack.Screen options={{ headerShown: false }} name="Notes" component={NoteList} />
+        <AppStack.Screen options={{ headerShown: false }} name="Write" component={TakeNote} />
+      </AppStack.Navigator>
+    </NavigationContainer>
   );
 }
 
@@ -118,9 +121,4 @@ const styles = StyleSheet.create({
     paddingHorizontal: MAIN_PADDING,
     height: device_height
   },
-  roundedButton: {
-    borderRadius: 10,
-    padding: 10,
-    backgroundColor: "#3B3B3B"
-  }
 });
