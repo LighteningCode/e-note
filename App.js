@@ -1,11 +1,12 @@
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Dimensions, FlatList, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import TakeNote from './screens/TakeNote';
 import RoundedButton from './components/RoundedButton';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const AppStack = createStackNavigator()
@@ -65,7 +66,43 @@ function NoteCardView({ title, date = "No date", backgroundColor = "#616161", ty
 
 function NoteList(props) {
 
-  const { navigation } = props
+  const { navigation, route } = props
+  const initalMount = useRef(true)
+  const [allNotes, setAllNotes] = useState({ data: [] })
+
+  useEffect(() => {
+
+    if (initalMount.current) {
+      getAllStoredNotes()
+      initalMount.current = false
+    } else {
+      // handle refershes here
+    }
+
+  }, [allNotes, initalMount, props])
+
+
+  useEffect(() => {
+    if (route?.params?.allNotes) {
+      setAllNotes({ data: route.params?.allNotes })
+    }
+    return () => { console.log("All notes refreshed") }
+  }, [route])
+
+
+
+  const getAllStoredNotes = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@notes')
+      if (value !== null) {
+        console.log(value)
+        setAllNotes(prevState => ({ ...prevState, data: JSON.parse(value) }))
+      }
+    } catch (e) {
+      // error reading value
+      console.log("An error occured retriving data")
+    }
+  }
 
   return (
     <SafeAreaView style={{ height: device_height, backgroundColor: '#252525' }}>
@@ -86,15 +123,25 @@ function NoteList(props) {
         </View>
 
         <View style={{ flex: 1, marginVertical: 70 }}>
-          <ScrollView style={{ backgroundColor: 'red' }}>
+          <ScrollView>
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', flex: 1 }}>
-              <NoteCardView backgroundColor={COLORS.red} title={"How to make your personal brand stand out"} date={"May 21, 2020"} />
+              {/* <NoteCardView backgroundColor={COLORS.red} title={"How to make your personal brand stand out"} date={"May 21, 2020"} />
               <NoteCardView backgroundColor={COLORS.pink} title={"School rep and the story"} />
               <NoteCardView backgroundColor={COLORS.orange} title={"Scenery and places to work in 2020"} type="wide" />
               <NoteCardView backgroundColor={COLORS.blue} title={"Being a Christian in 2020"} type="wide" />
               <NoteCardView backgroundColor={COLORS.pink} title={"What independence means to mesfafsasfhashfshafhs sahshasfh"} />
               <NoteCardView backgroundColor={COLORS.blue} title={"Being a Christian in 2020"} type="wide" />
-              <NoteCardView backgroundColor={COLORS.pink} title={"What independence means to mesfafsasfhashfshafhs sahshasfh"} />
+              <NoteCardView backgroundColor={COLORS.pink} title={"What independence means to mesfafsasfhashfshafhs sahshasfh"} /> */}
+              {
+                allNotes.data.map((value, idx) =>
+                  <NoteCardView
+                    key={`note${idx}`}
+                    backgroundColor={COLORS.orange}
+                    date={value.date}
+                    title={value.title}
+                    type="square" />
+                )
+              }
             </View>
           </ScrollView>
         </View>

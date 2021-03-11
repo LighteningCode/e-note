@@ -43,7 +43,8 @@ const styles = StyleSheet.create({
 
 function TakeNote(props) {
 
-    const { navigation } = props
+    const { navigation, } = props
+
     const initalMount = useRef(true)
     const [date, setDate] = useState('')
     const [title, setTitle] = useState("")
@@ -70,8 +71,8 @@ function TakeNote(props) {
         try {
             const value = await AsyncStorage.getItem('@notes')
             if (value !== null) {
-                console.log(value)
-                setAllNotes(prevState => ({...prevState,data: JSON.parse(value)}))
+                // console.log(value)
+                setAllNotes(prevState => ({ ...prevState, data: JSON.parse(value) }))
             }
         } catch (e) {
             // error reading value
@@ -89,14 +90,14 @@ function TakeNote(props) {
             text: noteText
         }
 
-        let _tempNotes =  allNotes.data
+        let _tempNotes = allNotes.data
         _tempNotes[_tempNotes.length] = data
 
         if (data.title !== '') {
-            storeData("@notes",_tempNotes)   
+            storeData("@notes", _tempNotes)
         }
         
-        navigation.goBack()
+        navigation.navigate("Notes", { allNotes: _tempNotes })
     }
 
 
