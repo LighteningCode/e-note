@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     roundedButton: {
         borderRadius: 10,
         padding: 10,
-        backgroundColor: "#3B3B3B"
+        backgroundColor: "#3B3B3B",
     }
 })
 

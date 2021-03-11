@@ -1,12 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useRef, useState, useEffect } from 'react';
-import { Dimensions, FlatList, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, FlatList, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
 import TakeNote from './screens/TakeNote';
 import RoundedButton from './components/RoundedButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AntDesign } from '@expo/vector-icons';
 
 
 const AppStack = createStackNavigator()
@@ -35,7 +36,7 @@ function ActionButton({ onPress }) {
 }
 
 
-function NoteCardView({ title, date = "No date", backgroundColor = "#616161", type = "square" }) {
+function NoteCardView({ title, date = "No date", backgroundColor = "#616161", type = "square", onPress = () => { } }) {
 
   let comp_height;
   let comp_width;
@@ -54,21 +55,35 @@ function NoteCardView({ title, date = "No date", backgroundColor = "#616161", ty
   }
 
   return (
-    <View style={{ backgroundColor: backgroundColor, width: comp_width, height: comp_height, borderRadius: 15, padding: 12, margin: CARD_MARGIN, justifyContent: 'space-between' }}>
+    <TouchableOpacity onPress={onPress} style={{ backgroundColor: backgroundColor, width: comp_width, height: comp_height, borderRadius: 15, padding: 12, margin: CARD_MARGIN, justifyContent: 'space-between' }}>
       <View style={{ flex: 10 }}>
         <Text ellipsizeMode='tail' lineBreakMode='tail' numberOfLines={4} style={{ fontSize: 24, fontWeight: '500' }}>{title}</Text>
       </View>
       <Text style={{ fontSize: 16, fontWeight: '300', flex: 2, textAlign: datePosition }}>{date}</Text>
-    </View>
+    </TouchableOpacity>
   )
 
 }
+
+const templateNotes = () => (
+  <>
+    <NoteCardView backgroundColor={COLORS.red} title={"How to make your personal brand stand out"} date={"May 21, 2020"} />
+    <NoteCardView backgroundColor={COLORS.pink} title={"School rep and the story"} />
+    <NoteCardView backgroundColor={COLORS.orange} title={"Scenery and places to work in 2020"} type="wide" />
+    <NoteCardView backgroundColor={COLORS.blue} title={"Being a Christian in 2020"} type="wide" />
+    <NoteCardView backgroundColor={COLORS.pink} title={"What independence means to mesfafsasfhashfshafhs sahshasfh"} />
+    <NoteCardView backgroundColor={COLORS.blue} title={"Being a Christian in 2020"} type="wide" />
+    <NoteCardView backgroundColor={COLORS.pink} title={"What independence means to mesfafsasfhashfshafhs sahshasfh"} />
+  </>
+)
 
 function NoteList(props) {
 
   const { navigation, route } = props
   const initalMount = useRef(true)
   const [allNotes, setAllNotes] = useState({ data: [] })
+  const [canSearch, setCanSearch] = useState(false)
+  const [searchWord, setSearchWord] = useState("")
 
   useEffect(() => {
 
@@ -88,6 +103,10 @@ function NoteList(props) {
     }
     return () => { console.log("All notes refreshed") }
   }, [route])
+
+  const openNote = (data) => {
+    navigation.navigate("Write", { ...data })
+  }
 
 
 
@@ -110,13 +129,31 @@ function NoteList(props) {
 
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 20, position: 'absolute', zIndex: 500, width: device_width, paddingHorizontal: MAIN_PADDING }}>
 
-          <View style={{ alignSelf: 'center' }}>
-            <Text style={{ fontSize: 30, fontWeight: '600', color: 'white' }}>Notes</Text>
+          <View style={{ alignSelf: 'center', flex: 9 }}>
+
+            {
+              (canSearch)
+                ?
+                <TextInput
+                  onChangeText={(searchWord) => setSearchWord(searchWord)}
+                  placeholder={"Type note you are searching here"}
+                  placeholderTextColor="#999999"
+                  style={{color:"white",fontSize: 20}} />
+                :
+                <Text style={{ fontSize: 30, fontWeight: '600', color: 'white' }}>Notes</Text>
+            }
+
           </View>
 
-          <View>
-            <RoundedButton>
-              <Feather name="search" size={24} color="white" />
+          <View style={{flex: 1.3, alignContent:'center', justifyContent: 'flex-end'}}>
+            <RoundedButton onPress={() => { setCanSearch(!canSearch) }}>
+              {
+                (canSearch)
+                  ?
+                  <AntDesign name="close" size={24} color="white" />
+                  :
+                  <Feather name="search" size={24} color="white" />
+              }
             </RoundedButton>
           </View>
 
@@ -125,16 +162,11 @@ function NoteList(props) {
         <View style={{ flex: 1, marginVertical: 70 }}>
           <ScrollView>
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', flex: 1 }}>
-              {/* <NoteCardView backgroundColor={COLORS.red} title={"How to make your personal brand stand out"} date={"May 21, 2020"} />
-              <NoteCardView backgroundColor={COLORS.pink} title={"School rep and the story"} />
-              <NoteCardView backgroundColor={COLORS.orange} title={"Scenery and places to work in 2020"} type="wide" />
-              <NoteCardView backgroundColor={COLORS.blue} title={"Being a Christian in 2020"} type="wide" />
-              <NoteCardView backgroundColor={COLORS.pink} title={"What independence means to mesfafsasfhashfshafhs sahshasfh"} />
-              <NoteCardView backgroundColor={COLORS.blue} title={"Being a Christian in 2020"} type="wide" />
-              <NoteCardView backgroundColor={COLORS.pink} title={"What independence means to mesfafsasfhashfshafhs sahshasfh"} /> */}
+
               {
                 allNotes.data.map((value, idx) =>
                   <NoteCardView
+                    onPress={() => openNote(value)}
                     key={`note${idx}`}
                     backgroundColor={COLORS.orange}
                     date={value.date}
