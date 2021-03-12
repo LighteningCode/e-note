@@ -109,6 +109,7 @@ function NoteList(props) {
   }
 
 
+  // implement on search
 
   const getAllStoredNotes = async () => {
     try {

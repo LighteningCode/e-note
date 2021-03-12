@@ -121,9 +121,8 @@ function TakeNote(props) {
                 text: noteText
             }
 
-            _tempNotes[_tempNotes.length] = data
-
             if (data.title !== '') {
+                _tempNotes[_tempNotes.length] = data
                 storeData("@notes", _tempNotes)
             }
 
