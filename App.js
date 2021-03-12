@@ -169,7 +169,6 @@ function NoteList(props) {
                   <NoteCardView
                     onPress={() => openNote(value)}
                     key={`note${idx}`}
-                    backgroundColor={COLORS.orange}
                     date={value.date}
                     title={value.title}
                     type="square" />
