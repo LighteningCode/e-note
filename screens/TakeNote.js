@@ -115,6 +115,7 @@ function TakeNote(props) {
         if (route.params) {
             setTitle(route.params.title)
             setNoteText(route.params.text)
+            console.log(route.params)
         }
         return () => { }
     }, [route])
@@ -188,24 +189,22 @@ function TakeNote(props) {
     }
 
     const handleDelete = (id) => {
-
-        // before goint back save the data 
-        setModalVisible(!modalVisible)
+        
         let _tempNotes = allNotes.data
 
         let foundNoteIndex = _tempNotes.findIndex(item => item.id === id)
 
-        console.log(foundNoteIndex)
-
-        if (foundNoteIndex) {
+        if (foundNoteIndex >= 0) {
             _tempNotes[foundNoteIndex] = null
 
             const newNotes = _tempNotes.filter(x => x !== null)
 
-            console.log(newNotes)
+            storeData("@notes", newNotes)
 
             navigation.navigate("Notes", { allNotes: newNotes })
         }
+
+        setModalVisible(!modalVisible)
     }
 
     return (
@@ -225,7 +224,7 @@ function TakeNote(props) {
                         </View>
 
                         <View style={{ flexDirection: 'row' }}>
-                            <RoundedButton>
+                            <RoundedButton style={{marginRight: 5}}>
                                 <Ionicons name="color-palette-sharp" size={24} color="white" />
                             </RoundedButton>
                             {
