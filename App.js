@@ -19,12 +19,12 @@ const MAIN_PADDING = 15;
 const CARD_MARGIN = 5
 
 const COLORS = {
-  red: "#FFAB91",
-  orange: "#FFCC80",
-  yellow: "#E6EE9B",
-  blue: "#80DEEA",
-  pink: "#CF93D9",
-  green: "#80CBC4"
+  red: "#f5604c",
+  orange: "#f28c27",
+  yellow: "#f2d027",
+  blue: "#6dc0ed",
+  purple: "#d593ed",
+  green: "#60e080"
 }
 
 function ActionButton({ onPress }) {
@@ -65,15 +65,15 @@ function NoteCardView({ title, date = "No date", backgroundColor = "#616161", ty
 
 }
 
-const templateNotes = () => (
+const TemplateNotes = () => (
   <>
     <NoteCardView backgroundColor={COLORS.red} title={"How to make your personal brand stand out"} date={"May 21, 2020"} />
-    <NoteCardView backgroundColor={COLORS.pink} title={"School rep and the story"} />
+    <NoteCardView backgroundColor={COLORS.purple} title={"School rep and the story"} />
     <NoteCardView backgroundColor={COLORS.orange} title={"Scenery and places to work in 2020"} type="wide" />
     <NoteCardView backgroundColor={COLORS.blue} title={"Being a Christian in 2020"} type="wide" />
-    <NoteCardView backgroundColor={COLORS.pink} title={"What independence means to mesfafsasfhashfshafhs sahshasfh"} />
+    <NoteCardView backgroundColor={COLORS.purple} title={"What independence means to mesfafsasfhashfshafhs sahshasfh"} />
     <NoteCardView backgroundColor={COLORS.blue} title={"Being a Christian in 2020"} type="wide" />
-    <NoteCardView backgroundColor={COLORS.pink} title={"What independence means to mesfafsasfhashfshafhs sahshasfh"} />
+    <NoteCardView backgroundColor={COLORS.purple} title={"What independence means to mesfafsasfhashfshafhs sahshasfh"} />
   </>
 )
 
@@ -163,7 +163,7 @@ function NoteList(props) {
         <View style={{ flex: 1, marginVertical: 70 }}>
           <ScrollView>
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', flex: 1 }}>
-
+              <TemplateNotes />
               {
                 allNotes.data.map((value, idx) =>
                   <NoteCardView
