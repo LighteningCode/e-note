@@ -1,15 +1,15 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Dimensions, FlatList, KeyboardAvoidingView, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Keyboard, TouchableWithoutFeedback, _Text } from 'react-native';
+import { Dimensions, FlatList, KeyboardAvoidingView, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, Keyboard, TouchableWithoutFeedback, _Text, Modal, Pressable } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import RoundedButton from '../components/RoundedButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Ionicons } from '@expo/vector-icons';
 
 
 let device_width = Dimensions.get("window").width;
 let device_height = Dimensions.get("window").height;
 const MAIN_PADDING = 30;
 const CARD_MARGIN = 5
-
 
 const COLORS = {
     red: "#FFAB91",
@@ -38,6 +38,49 @@ const styles = StyleSheet.create({
         paddingTop: 7,
         color: "white",
         paddingBottom: 20
+    },
+    centeredView: {
+        flex: 1,
+        height: device_height,
+        width: device_width,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22,
+        backgroundColor: "rgba(0,0,0,0.5)",
+        position: 'absolute',
+        top: 0,
+        left: 0
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+    },
+    button: {
+        borderRadius: 20,
+        padding: 10,
+        elevation: 2
+    },
+    modalText: {
+        fontSize: 20,
+        textAlign: "center",
+        fontWeight: "bold"
+    },
+    button: {
+        borderRadius: 10,
+        paddingHorizontal: 30,
+        paddingVertical: 10,
+        backgroundColor: "#3B3B3B",
     }
 });
 
@@ -49,6 +92,7 @@ function TakeNote(props) {
     const [date, setDate] = useState('')
     const [title, setTitle] = useState("")
     const [noteText, setNoteText] = useState("")
+    const [modalVisible, setModalVisible] = useState(false)
     const [allNotes, setAllNotes] = useState({ data: [] })
 
 
@@ -113,7 +157,7 @@ function TakeNote(props) {
         }
 
         if (typeof route.params !== "object") {
-           
+
             const data = {
                 id: _tempNotes.length,
                 title: title,
@@ -143,6 +187,27 @@ function TakeNote(props) {
 
     }
 
+    const handleDelete = (id) => {
+
+        // before goint back save the data 
+        setModalVisible(!modalVisible)
+        let _tempNotes = allNotes.data
+
+        let foundNoteIndex = _tempNotes.findIndex(item => item.id === id)
+
+        console.log(foundNoteIndex)
+
+        if (foundNoteIndex) {
+            _tempNotes[foundNoteIndex] = null
+
+            const newNotes = _tempNotes.filter(x => x !== null)
+
+            console.log(newNotes)
+
+            navigation.navigate("Notes", { allNotes: newNotes })
+        }
+    }
+
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#252525' }}>
 
@@ -151,7 +216,7 @@ function TakeNote(props) {
 
 
 
-                    <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-between', marginVertical: 20, position: 'absolute', zIndex: 500, width: device_width, paddingHorizontal: 30 }}>
+                    <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-between', marginVertical: 20, position: 'absolute', zIndex: 500, width: device_width, paddingHorizontal: 20 }}>
 
                         <View style={{ alignSelf: 'center' }}>
                             <RoundedButton onPress={() => handleBackbutton()}>
@@ -159,13 +224,56 @@ function TakeNote(props) {
                             </RoundedButton>
                         </View>
 
-                        <View>
+                        <View style={{ flexDirection: 'row' }}>
                             <RoundedButton>
-                                <Feather name="edit" size={24} color="white" />
+                                <Ionicons name="color-palette-sharp" size={24} color="white" />
                             </RoundedButton>
+                            {
+                                (route.params)
+                                    ?
+                                    <RoundedButton onPress={() => { setModalVisible(!modalVisible) }} style={{ backgroundColor: "red" }}>
+                                        <Ionicons name="trash-bin" size={24} color="white" />
+                                    </RoundedButton>
+                                    :
+                                    null
+                            }
+
                         </View>
 
                     </View>
+
+                    <Modal
+                        animationType="fade"
+                        transparent={true}
+                        visible={modalVisible}
+                        onRequestClose={() => {
+                            Alert.alert("Modal has been closed.");
+                            setModalVisible(!modalVisible);
+                        }}
+                    >
+                        <TouchableOpacity onPress={() => setModalVisible(!modalVisible)} activeOpacity={1} style={styles.centeredView}>
+                            <View style={styles.modalView}>
+                                <Text style={styles.modalText}>Are your sure you want to delete this note?</Text>
+
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 20, width: 250 }}>
+                                    <TouchableOpacity
+                                        onPress={() => { handleDelete(route.params.id) }}
+                                        style={{ ...styles.button, backgroundColor: "red" }}
+                                        activeOpacity={0.8}>
+                                        <Text style={{ color: 'white', fontSize: 18 }}>Yes</Text>
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity
+                                        style={styles.button}
+                                        activeOpacity={0.8}
+                                        onPress={() => setModalVisible(!modalVisible)}
+                                    >
+                                        <Text style={{ color: 'white', fontSize: 18 }}>No</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </TouchableOpacity>
+                    </Modal>
 
 
 
