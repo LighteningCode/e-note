@@ -213,8 +213,6 @@ function TakeNote(props) {
             <TouchableWithoutFeedback onPress={Keyboard.dismiss} style={{ flex: 1 }} >
                 <View style={styles.container}>
 
-
-
                     <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-between', marginVertical: 20, position: 'absolute', zIndex: 500, width: device_width, paddingHorizontal: 20 }}>
 
                         <View style={{ alignSelf: 'center' }}>

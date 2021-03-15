@@ -131,7 +131,6 @@ function NoteList(props) {
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginVertical: 20, position: 'absolute', zIndex: 500, width: device_width, paddingHorizontal: MAIN_PADDING }}>
 
           <View style={{ alignSelf: 'center', flex: 9 }}>
-
             {
               (canSearch)
                 ?
