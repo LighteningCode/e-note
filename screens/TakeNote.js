@@ -4,6 +4,9 @@ import { Feather } from '@expo/vector-icons';
 import RoundedButton from '../components/RoundedButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
+import BottomSheet from '@gorhom/bottom-sheet';
+import { useMemo } from 'react';
+import { useCallback } from 'react';
 
 
 let device_width = Dimensions.get("window").width;
@@ -94,6 +97,14 @@ function TakeNote(props) {
     const [noteText, setNoteText] = useState("")
     const [modalVisible, setModalVisible] = useState(false)
     const [allNotes, setAllNotes] = useState({ data: [] })
+
+    const bottomSheetRef = useRef(null)
+
+    const snapPoints = useMemo(() => ['25%', '50%'], []);
+
+    const handleSheetChanges = useCallback((index) => {
+        console.log("Handle sheet changes", index)
+    }, [])
 
 
     useEffect(() => {
@@ -189,7 +200,7 @@ function TakeNote(props) {
     }
 
     const handleDelete = (id) => {
-        
+
         let _tempNotes = allNotes.data
 
         let foundNoteIndex = _tempNotes.findIndex(item => item.id === id)
@@ -222,9 +233,11 @@ function TakeNote(props) {
                         </View>
 
                         <View style={{ flexDirection: 'row' }}>
-                            <RoundedButton style={{marginRight: 5}}>
+
+                            <RoundedButton onPress={() =>{bottomSheetRef.current.expand()}} style={{ marginRight: 5 }}>
                                 <Ionicons name="color-palette-sharp" size={24} color="white" />
                             </RoundedButton>
+
                             {
                                 (route.params)
                                     ?
@@ -313,6 +326,19 @@ function TakeNote(props) {
                 </View>
 
             </TouchableWithoutFeedback>
+
+
+            <BottomSheet
+                ref={bottomSheetRef}
+                index={1}
+                snapPoints={snapPoints}
+                onChange={handleSheetChanges}
+            >
+                <View>
+                    <Text>Hello</Text>
+                </View>
+
+            </BottomSheet>
 
         </SafeAreaView>
 

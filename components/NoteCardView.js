@@ -1,5 +1,19 @@
 import React, { useRef, useState, useEffect } from 'react';
 
+let device_width = Dimensions.get("window").width;
+let device_height = Dimensions.get("window").height;
+const MAIN_PADDING = 15;
+const CARD_MARGIN = 5
+
+const COLORS = {
+  red: "#f5604c",
+  orange: "#f28c27",
+  yellow: "#f2d027",
+  blue: "#6dc0ed",
+  purple: "#d593ed",
+  green: "#60e080"
+}
+
 
 
 function NoteCardView({ title, date = "No date", backgroundColor = "#616161", type = "square", onPress = () => { } }) {
