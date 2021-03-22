@@ -4,7 +4,6 @@ import { Feather } from '@expo/vector-icons';
 import RoundedButton from '../components/RoundedButton';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
-import BottomSheet from '@gorhom/bottom-sheet';
 import { useMemo } from 'react';
 import { useCallback } from 'react';
 
@@ -12,7 +11,7 @@ import { useCallback } from 'react';
 let device_width = Dimensions.get("window").width;
 let device_height = Dimensions.get("window").height;
 const MAIN_PADDING = 30;
-const CARD_MARGIN = 5
+const CARD_MARGIN = 54
 
 const COLORS = {
     red: "#FFAB91",
