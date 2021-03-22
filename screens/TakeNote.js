@@ -213,6 +213,14 @@ function TakeNote(props) {
         setModalVisible(!modalVisible)
     }
 
+    const CardPaletteColor = ({ color, active, onPress }) => {
+        return (
+            <TouchableOpacity style={{ width: 50, height: 50, backgroundColor: color, borderRadius: 50, borderWidth: (active) ? 3 : 0, borderColor: "rgba(61, 61, 61,0.5)" }}>
+                <Text>&nbsp;</Text>
+            </TouchableOpacity>
+        )
+    }
+
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: '#252525' }}>
 
@@ -331,12 +339,26 @@ function TakeNote(props) {
                         backgroundColor: "transparent"
                     },
                     draggableIcon: {
-                        backgroundColor: "#000"
+                        backgroundColor: "#fff"
+                    },
+                    container: {
+                        backgroundColor: "#383838",
+                        paddingHorizontal: 15,
+                        height: 200
                     }
                 }}
             >
                 <View>
-                    <Text>Hello from bottom sheet</Text>
+                    <Text style={{ color: "white", textAlign: 'center', fontSize: 20 }}>Select a card color</Text>
+                </View>
+
+                <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 20, flexWrap:'wrap' }}>
+                    <CardPaletteColor color={COLORS.blue} active={true} />
+                    <CardPaletteColor color={COLORS.green} />
+                    <CardPaletteColor color={COLORS.orange} />
+                    <CardPaletteColor color={COLORS.pink} />
+                    <CardPaletteColor color={COLORS.red} />
+                    <CardPaletteColor color={COLORS.yellow} />
                 </View>
 
             </RBSheet>
