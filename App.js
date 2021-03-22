@@ -170,6 +170,7 @@ function NoteList(props) {
                     key={`note${idx}`}
                     date={value.date}
                     title={value.title}
+                    backgroundColor={value.color}
                     type="square" />
                 )
               }

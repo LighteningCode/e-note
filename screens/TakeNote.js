@@ -92,7 +92,9 @@ function TakeNote(props) {
     const { navigation, route } = props
 
     const initalMount = useRef(true)
+
     const [date, setDate] = useState('')
+    const [cardColor, setCardColor] = useState(null)
     const [title, setTitle] = useState("")
     const [noteText, setNoteText] = useState("")
     const [modalVisible, setModalVisible] = useState(false)
@@ -121,6 +123,7 @@ function TakeNote(props) {
         if (route.params) {
             setTitle(route.params.title)
             setNoteText(route.params.text)
+            setCardColor(route.params.color)
             console.log(route.params)
         }
         return () => { }
@@ -151,7 +154,8 @@ function TakeNote(props) {
                 id: route.params.id,
                 title: title,
                 date: date,
-                text: noteText
+                text: noteText,
+                color: cardColor
             }
 
             _tempNotes[route.params.id] = data
@@ -169,7 +173,8 @@ function TakeNote(props) {
                 id: _tempNotes.length,
                 title: title,
                 date: date,
-                text: noteText
+                text: noteText,
+                color: cardColor
             }
 
             if (data.title !== '') {
@@ -213,9 +218,17 @@ function TakeNote(props) {
         setModalVisible(!modalVisible)
     }
 
+
+
     const CardPaletteColor = ({ color, active, onPress }) => {
+
+        const saveColor = () => {
+            // switch the color 
+            onPress(color)
+        }
+
         return (
-            <TouchableOpacity style={{ width: 50, height: 50, backgroundColor: color, borderRadius: 50, borderWidth: (active) ? 3 : 0, borderColor: "rgba(61, 61, 61,0.5)" }}>
+            <TouchableOpacity activeOpacity={0.8} onPress={() => saveColor()} style={{ width: 50, height: 50, backgroundColor: color, borderRadius: 50, borderWidth: (active) ? 3 : 0, borderColor: "rgba(61, 61, 61,0.7)" }}>
                 <Text>&nbsp;</Text>
             </TouchableOpacity>
         )
@@ -238,7 +251,7 @@ function TakeNote(props) {
                         <View style={{ flexDirection: 'row' }}>
 
                             <RoundedButton onPress={() => { bottomSheetRef.current.open() }} style={{ marginRight: 5 }}>
-                                <Ionicons name="color-palette-sharp" size={24} color="white" />
+                                <Ionicons name="color-palette-sharp" size={24} color={(cardColor) ? cardColor : "white"} />
                             </RoundedButton>
 
                             {
@@ -333,7 +346,7 @@ function TakeNote(props) {
             <RBSheet
                 ref={bottomSheetRef}
                 closeOnDragDown={true}
-                closeOnPressMask={false}
+                closeOnPressMask={true}
                 customStyles={{
                     wrapper: {
                         backgroundColor: "transparent"
@@ -344,21 +357,44 @@ function TakeNote(props) {
                     container: {
                         backgroundColor: "#383838",
                         paddingHorizontal: 15,
-                        height: 200
                     }
                 }}
+                height={200}
             >
                 <View>
                     <Text style={{ color: "white", textAlign: 'center', fontSize: 20 }}>Select a card color</Text>
                 </View>
 
-                <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 20, flexWrap:'wrap' }}>
-                    <CardPaletteColor color={COLORS.blue} active={true} />
-                    <CardPaletteColor color={COLORS.green} />
-                    <CardPaletteColor color={COLORS.orange} />
-                    <CardPaletteColor color={COLORS.pink} />
-                    <CardPaletteColor color={COLORS.red} />
-                    <CardPaletteColor color={COLORS.yellow} />
+                <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 20, flexWrap: 'wrap' }}>
+                    <CardPaletteColor
+                        color={COLORS.blue}
+                        active={(cardColor === COLORS.blue) ? true : false}
+                        onPress={(color) => setCardColor(color)} />
+
+                    <CardPaletteColor
+                        color={COLORS.green}
+                        active={(cardColor === COLORS.green) ? true : false}
+                        onPress={(color) => setCardColor(color)} />
+
+                    <CardPaletteColor
+                        color={COLORS.orange}
+                        active={(cardColor === COLORS.orange) ? true : false}
+                        onPress={(color) => setCardColor(color)} />
+
+                    <CardPaletteColor
+                        color={COLORS.pink}
+                        active={(cardColor === COLORS.pink) ? true : false}
+                        onPress={(color) => setCardColor(color)} />
+
+                    <CardPaletteColor
+                        color={COLORS.red}
+                        active={(cardColor === COLORS.red) ? true : false}
+                        onPress={(color) => setCardColor(color)} />
+
+                    <CardPaletteColor
+                        color={COLORS.yellow}
+                        active={(cardColor === COLORS.yellow) ? true : false}
+                        onPress={(color) => setCardColor(color)} />
                 </View>
 
             </RBSheet>
