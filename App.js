@@ -138,14 +138,14 @@ function NoteList(props) {
                   onChangeText={(searchWord) => setSearchWord(searchWord)}
                   placeholder={"Type note you are searching here"}
                   placeholderTextColor="#999999"
-                  style={{color:"white",fontSize: 20}} />
+                  style={{ color: "white", fontSize: 20 }} />
                 :
                 <Text style={{ fontSize: 30, fontWeight: '600', color: 'white' }}>Notes</Text>
             }
 
           </View>
 
-          <View style={{flex: 1.3, alignContent:'center', justifyContent: 'flex-end'}}>
+          <View style={{ flex: 1.3, alignContent: 'center', justifyContent: 'flex-end' }}>
             <RoundedButton onPress={() => { setCanSearch(!canSearch) }}>
               {
                 (canSearch)
@@ -162,7 +162,6 @@ function NoteList(props) {
         <View style={{ flex: 1, marginVertical: 70 }}>
           <ScrollView>
             <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', flex: 1 }}>
-              <TemplateNotes />
               {
                 allNotes.data.map((value, idx) =>
                   <NoteCardView
@@ -170,8 +169,8 @@ function NoteList(props) {
                     key={`note${idx}`}
                     date={value.date}
                     title={value.title}
-                    backgroundColor={value.color}
-                    type="square" />
+                    backgroundColor={(value.color) ? value.color : "#616161"}
+                    type={((idx + 1) % 3 === 0) ? "wide" : "square"} />
                 )
               }
             </View>

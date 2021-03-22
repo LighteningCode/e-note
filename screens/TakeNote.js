@@ -360,6 +360,7 @@ function TakeNote(props) {
                     }
                 }}
                 height={200}
+                
             >
                 <View>
                     <Text style={{ color: "white", textAlign: 'center', fontSize: 20 }}>Select a card color</Text>
