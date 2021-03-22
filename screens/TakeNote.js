@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Ionicons } from '@expo/vector-icons';
 import { useMemo } from 'react';
 import { useCallback } from 'react';
+import RBSheet from 'react-native-raw-bottom-sheet';
 
 
 let device_width = Dimensions.get("window").width;
@@ -99,11 +100,6 @@ function TakeNote(props) {
 
     const bottomSheetRef = useRef(null)
 
-    const snapPoints = useMemo(() => ['25%', '50%'], []);
-
-    const handleSheetChanges = useCallback((index) => {
-        console.log("Handle sheet changes", index)
-    }, [])
 
 
     useEffect(() => {
@@ -233,7 +229,7 @@ function TakeNote(props) {
 
                         <View style={{ flexDirection: 'row' }}>
 
-                            <RoundedButton onPress={() =>{bottomSheetRef.current.expand()}} style={{ marginRight: 5 }}>
+                            <RoundedButton onPress={() => { bottomSheetRef.current.open() }} style={{ marginRight: 5 }}>
                                 <Ionicons name="color-palette-sharp" size={24} color="white" />
                             </RoundedButton>
 
@@ -326,18 +322,25 @@ function TakeNote(props) {
 
             </TouchableWithoutFeedback>
 
-
-            <BottomSheet
+            <RBSheet
                 ref={bottomSheetRef}
-                index={1}
-                snapPoints={snapPoints}
-                onChange={handleSheetChanges}
+                closeOnDragDown={true}
+                closeOnPressMask={false}
+                customStyles={{
+                    wrapper: {
+                        backgroundColor: "transparent"
+                    },
+                    draggableIcon: {
+                        backgroundColor: "#000"
+                    }
+                }}
             >
                 <View>
-                    <Text>Hello</Text>
+                    <Text>Hello from bottom sheet</Text>
                 </View>
 
-            </BottomSheet>
+            </RBSheet>
+
 
         </SafeAreaView>
 
