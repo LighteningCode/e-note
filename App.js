@@ -96,6 +96,16 @@ function NoteList(props) {
 
   }, [allNotes, initalMount, props])
 
+  useEffect(() => {
+    const _tempAllNotes = allNotes
+    if (searchWord && canSearch) {
+      let newNotes = _tempAllNotes.data.filter(note => note.title.toLowerCase().includes(searchWord.toLowerCase()))
+      setAllNotes({ data: newNotes })
+    } else {
+      getAllStoredNotes()
+    }
+  }, [searchWord])
+
 
   useEffect(() => {
     if (route?.params?.allNotes) {
