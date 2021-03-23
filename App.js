@@ -1,6 +1,5 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useRef, useState, useEffect } from 'react';
-import { Dimensions, FlatList, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Dimensions, FlatList, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View, StatusBar } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
@@ -81,6 +80,7 @@ function NoteList(props) {
 
   const { navigation, route } = props
   const initalMount = useRef(true)
+  const searchRef = useRef()
   const [allNotes, setAllNotes] = useState({ data: [] })
   const [canSearch, setCanSearch] = useState(false)
   const [searchWord, setSearchWord] = useState("")
@@ -90,11 +90,12 @@ function NoteList(props) {
     if (initalMount.current) {
       getAllStoredNotes()
       initalMount.current = false
+      StatusBar.setBarStyle("light-content")
     } else {
       // handle refershes here
     }
 
-  }, [allNotes, initalMount, props])
+  }, [allNotes, initalMount, searchRef, props])
 
   useEffect(() => {
     const _tempAllNotes = allNotes
@@ -125,7 +126,7 @@ function NoteList(props) {
     try {
       const value = await AsyncStorage.getItem('@notes')
       if (value !== null) {
-        console.log(value)
+        // console.log(value)
         setAllNotes(prevState => ({ ...prevState, data: JSON.parse(value) }))
       }
     } catch (e) {
@@ -145,6 +146,7 @@ function NoteList(props) {
               (canSearch)
                 ?
                 <TextInput
+                  ref={(input) => searchRef.current = input}
                   onChangeText={(searchWord) => setSearchWord(searchWord)}
                   placeholder={"Type note you are searching here"}
                   placeholderTextColor="#999999"
@@ -156,7 +158,11 @@ function NoteList(props) {
           </View>
 
           <View style={{ flex: 1.3, alignContent: 'center', justifyContent: 'flex-end' }}>
-            <RoundedButton onPress={() => { setCanSearch(!canSearch) }}>
+            <RoundedButton onPress={() => {
+              setCanSearch(!canSearch);
+              // (!canSearch) ? searchRef.current.focus() : null
+            }
+            }>
               {
                 (canSearch)
                   ?
