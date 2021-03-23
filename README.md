@@ -15,3 +15,9 @@ E note is an dribble inspired build that is meant to make taking notes easy.
 3. I just want to learn more and use it to build better
 
 
+----------
+My build below 🎉🎉
+It works great, but still some more stuff to add
+![Note app](./assets/buildnote.jpeg)
+
+
