@@ -21,3 +21,7 @@ It works great, but still some more stuff to add
 ![Note app](./assets/buildnote.jpeg)
 
 
+Take note page
+![Note app](./assets/buildnote1.jpeg)
+
+
